@@ -12,20 +12,35 @@
         "irc": "irc://irc.freenode.net/yii",
         "source": "https://github.com/yiisoft/yii2"
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": "~2.0.6",
         "yiisoft/yii2-bootstrap": "~2.0.0",
-        "yiisoft/yii2-swiftmailer": "~2.0.0"
+        "yiisoft/yii2-swiftmailer": "~2.0.0",
+        "mdmsoft/yii2-admin":"~2.0",
+        "kartik-v/yii2-grid": "@dev",
+        "kartik-v/yii2-detail-view": "*",
+        "kartik-v/yii2-mpdf": "@dev",
+        "kartik-v/yii2-date-range": "@dev",
+        "kartik-v/yii2-datecontrol": "dev-master",
+        "kartik-v/yii2-widget-datepicker": "@dev",
+        "kartik-v/yii2-widgets": "*",
+        "kartik-v/yii2-editable": "@dev",
+        "kartik-v/yii2-dialog": "*",
+        "pheme/yii2-settings": "*"        
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
         "yiisoft/yii2-gii": "~2.0.0",
         "yiisoft/yii2-faker": "~2.0.0",
-
-        "codeception/base": "^2.2.3",
-        "codeception/verify": "~0.3.1"
+        "codeception/codeception": "^2.2.5",
+        "codeception/verify": "~0.3.2",
+        "codeception/specify": "~0.4.3",
+        "league/factory-muffin": "^3.0",
+        "league/factory-muffin-faker": "^2.0",
+        "phpdocumentor/phpdocumentor": "2.*",
+        "dmstr/yii2-db": "*"
     },
     "config": {
         "process-timeout": 1800
