@@ -1,0 +1,13 @@
+class_name: AcceptanceTester
+modules:
+    enabled:
+#        - PhpBrowser:
+#            url: http://admin.example.com/     
+           
+        - WebDriver:
+            url: http://admin.example.com/index-test.php
+#            window_size: 640x480
+            browser: phantomjs
+        - Yii2:
+            part: [orm, fixtures]
+        - backend\tests\Helper\Acceptance:

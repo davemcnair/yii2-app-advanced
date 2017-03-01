@@ -1,0 +1,11 @@
+
+Options -Indexes
+<IfModule mod_rewrite.c>
+  RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*) backend/web/index.php/$1 [QSA,L]
+
+#Order deny,allow
+#Deny from all
+#Allow from 62.30.84.63 54.154.80.99 31.52.0.125

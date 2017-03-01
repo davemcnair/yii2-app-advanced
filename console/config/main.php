@@ -11,6 +11,28 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'console\controllers',
+    'controllerMap' => [
+        'batch' => [
+            'class' => 'schmunk42\giiant\commands\BatchController',
+            'modelQueryNamespace' => '\\common\\models\\query',
+            'useTranslatableBehavior'=>false,
+            'enableI18N'=>false,
+            'crudIndexGridClass'=>'kartik\grid\GridView',
+    //        'crudControllerNamespace' => 'app\\modules\\crud\\controllers',
+    //        'crudSearchModelNamespace' => 'app\\modules\\crud\\models\\search',
+    //        'crudViewPath' => '@app/modules/crud/views',
+            'crudPathPrefix' => '/',
+    //        'crudTidyOutput' => true,
+    //        'crudAccessFilter' => true,
+    //        'crudProviders' => [
+    //            'schmunk42\\giiant\\generators\\crud\\providers\\optsProvider',
+    //        ],
+    //        'tablePrefix' => 'eko_',
+            /*'tables' => [
+                'app_profile',
+            ]*/
+        ]
+    ],
     'components' => [
         'log' => [
             'targets' => [

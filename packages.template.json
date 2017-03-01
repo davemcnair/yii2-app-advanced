@@ -1,0 +1,11 @@
+{
+    "package": {
+        "name": "davemcnair/yii2-app-advanced-fork",
+        "version": "1.0.0",
+        "source": {
+          "url": "/var/www/yii2-app-advanced-fork/.git",
+          "type": "git",
+          "reference": "master"
+        }
+    }
+}

@@ -19,7 +19,27 @@ namespace backend\tests;
 class FunctionalTester extends \Codeception\Actor
 {
     use _generated\FunctionalTesterActions;
-   /**
-    * Define custom actions here
-    */
+
+    public function loginAs($role){
+        switch ($role){
+            case 'devAdmin';
+                $this->login(
+                    'gledhill-dev',
+                     \Yii::$app->params['devPassword']
+                );
+}
+    }
+
+    public function login($name, $password)
+    {
+        $I = $this;
+        $I->amOnPage('/user/login');
+        $I->fillField('Username', $name);
+        $I->fillField('Password', $password);
+        $I->click('login-button');
+        $I->wait(1);
+//        $I->see('Logout ('.$name.')');
+//        $I->dontSeeLink('Login');
+    }
+
 }

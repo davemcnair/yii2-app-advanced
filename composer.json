@@ -1,6 +1,6 @@
 {
-    "name": "yiisoft/yii2-app-advanced",
-    "description": "Yii 2 Advanced Project Template",
+    "name": "davemcnair/yii2-app-advanced-fork",
+    "description": "Yii 2 Advanced Project Template Fork",
     "keywords": ["yii2", "framework", "advanced", "project template"],
     "homepage": "http://www.yiiframework.com/",
     "type": "project",
@@ -28,7 +28,9 @@
         "kartik-v/yii2-widgets": "*",
         "kartik-v/yii2-editable": "@dev",
         "kartik-v/yii2-dialog": "*",
-        "pheme/yii2-settings": "*"        
+        "pheme/yii2-settings": "*",
+        "wbraganca/yii2-dynamicform": "dev-master",
+        "yiisoft/yii2-authclient": "~2.1.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
@@ -40,7 +42,8 @@
         "league/factory-muffin": "^3.0",
         "league/factory-muffin-faker": "^2.0",
         "phpdocumentor/phpdocumentor": "2.*",
-        "dmstr/yii2-db": "*"
+        "dmstr/yii2-db": "*",
+        "schmunk42/yii2-giiant":"@dev"
     },
     "config": {
         "process-timeout": 1800

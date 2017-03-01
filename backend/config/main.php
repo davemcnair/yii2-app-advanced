@@ -12,6 +12,12 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'modules' => [
+        'admin' => [
+            'class' => 'mdm\admin\Module',
+            'controllerMap' => [
+                'user' => 'backend\controllers\UserController'
+            ],
+        ],
         'gridview' =>  [
              'class' => '\kartik\grid\Module'
              // enter optional module parameters below - only if you need to
@@ -24,12 +30,14 @@ return [
     ],
     'components' => [
         'request' => [
+//            'baseUrl'=>'/',
             'csrfParam' => '_csrf-backend',
         ],
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
+            'loginUrl' => ['user/login'],
         ],
         'session' => [
             // this is the name of the session cookie used for login on the backend
@@ -48,6 +56,7 @@ return [
             'errorAction' => 'site/error',
         ],
         'urlManager' => [
+//            'baseUrl'=>'/',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [

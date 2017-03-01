@@ -1,0 +1,11 @@
+class_name: FunctionalTester
+modules:
+    enabled:
+        #        - PhpBrowser:
+        #            url: http://admin.example.com/
+        - WebDriver:
+            url: http://admin.example.com/index-test.php
+            browser: phantomjs
+        - Yii2:
+            part: [orm, fixtures]
+        - backend\tests\Helper\Functional:
