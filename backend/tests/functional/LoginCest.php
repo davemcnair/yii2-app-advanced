@@ -3,7 +3,7 @@
 namespace backend\tests\functional;
 
 use \backend\tests\FunctionalTester;
-use common\fixtures\User as UserFixture;
+use common\fixtures\UserFixture as UserFixture;
 
 /**
  * Class LoginCest
@@ -24,12 +24,9 @@ class LoginCest
      */
     public function loginUser(FunctionalTester $I)
     {
-        $I->amOnPage('/site/login');
-        $I->fillField('Username', 'erau');
-        $I->fillField('Password', 'password_0');
-        $I->click('login-button');
+        $I->login('dev','asdasd');
 
-        $I->see('Logout (erau)', 'form button[type=submit]');
+//        $I->see('Logout (dev)', 'form button[type=submit]');
         $I->dontSeeLink('Login');
         $I->dontSeeLink('Signup');
     }

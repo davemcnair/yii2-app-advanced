@@ -24,7 +24,7 @@ class FunctionalTester extends \Codeception\Actor
         switch ($role){
             case 'devAdmin';
                 $this->login(
-                    'gledhill-dev',
+                    'dev',
                      \Yii::$app->params['devPassword']
                 );
 }
