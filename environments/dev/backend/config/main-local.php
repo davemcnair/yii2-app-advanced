@@ -40,7 +40,27 @@ if (YII_ENV_DEV) {
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
-         'allowedIPs' => ['*'],
+        'allowedIPs' => ['*'],
+        'generators' => [
+            'giiant-model'=>[
+                'class'     => 'schmunk42\giiant\generators\model\Generator',
+                'templates' => [
+                    'mymodel' => '@app/gii/model/default',
+                ]
+            ],
+            'crud' => [
+                'class' => 'backend\gii\crud\Generator',
+                'templates' => [
+                    'ekoCrud' => '@backend/gii/crud/default',
+                ]
+            ],
+            'model' => [
+                'class' => 'backend\gii\model\Generator',
+                'templates' => [
+                    'ekoModel' => '@backend/gii/model/default',
+                ]
+            ],
+        ],
     ];
 }
 

@@ -48,7 +48,7 @@ class AbstractController extends Controller
                         'allow' => true,
                         'roles' => ['@','admin'],
                         'matchCallback' => function ($rule, $action) {
-                            $role=AdminUser::roleFor(Yii::$app->user->identity->email);
+                            $role=\Yii::$app->user->identity->role;
                             return in_array($role,$rule->roles);
                         }
                     ],

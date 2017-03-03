@@ -33,7 +33,6 @@ use yii\helpers\StringHelper;
 * @var <?= ltrim($generator->modelClass, '\\') ?> $model
 * @var yii\widgets\ActiveForm $form
 */
-
 ?>
 
 <div class="<?= \yii\helpers\Inflector::camel2id(
@@ -43,21 +42,18 @@ use yii\helpers\StringHelper;
 ) ?>-form">
 
     <?= '<?php ' ?>$form = ActiveForm::begin([
-    'id' => '<?= $model->formName() ?>',
-    'layout' => '<?= $generator->formLayout ?>',
-    'enableClientValidation' => true,
-    'errorSummaryCssClass' => 'error-summary alert alert-error'
-    ]
-    );
+            'id' => '<?= $model->formName() ?>',
+            'layout' => '<?= $generator->formLayout ?>',
+            'enableClientValidation' => true,
+            'errorSummaryCssClass' => 'error-summary alert alert-danger'
+        ]);
     ?>
 
-    <div class="">
+    <div class="main">
         <?php echo "<?php \$this->beginBlock('main'); ?>\n"; ?>
 
-        <p>
-            <?php
+        <p><?php
             foreach ($safeAttributes as $attribute) {
-                echo "\n\n<!-- attribute $attribute -->";
                 $prepend = $generator->prependActiveField($attribute, $model);
                 $field = $generator->activeField($attribute, $model);
                 $append = $generator->appendActiveField($attribute, $model);
@@ -81,39 +77,34 @@ use yii\helpers\StringHelper;
         $label = substr(strrchr($model::className(), '\\'), 1);
 
         $items = <<<EOS
-[
-    'label'   => Yii::t('$generator->modelMessageCategory', '$label'),
-    'content' => \$this->blocks['main'],
-    'active'  => true,
-],
+                    [
+                        'label'   => Yii::t('$generator->modelMessageCategory', '$label'),
+                        'content' => \$this->blocks['main'],
+                        'active'  => true,
+                    ],
 EOS;
         ?>
 
         <?=
-        "<?=
-    Tabs::widget(
-                 [
-                    'encodeLabels' => false,
-                    'items' => [ 
-                        $items
-                    ]
-                 ]
-    );
-    ?>";
+        "<?=Tabs::widget([
+           'encodeLabels' => false,
+           'items' => [
+$items
+                ]
+            ]);
+        ?>";
         ?>
 
         <hr/>
 
         <?= '<?php ' ?>echo $form->errorSummary($model); ?>
 
-        <?= '<?= ' ?>Html::submitButton(
-        '<span class="glyphicon glyphicon-check"></span> ' .
-        ($model->isNewRecord ? <?= $generator->generateString('Create') ?> : <?= $generator->generateString('Save') ?>),
-        [
-        'id' => 'save-' . $model->formName(),
-        'class' => 'btn btn-success'
-        ]
-        );
+        <?= '<?= ' ?>Html::submitButton('<span class="glyphicon glyphicon-check"></span> ' .
+            ($model->isNewRecord ? <?= $generator->generateString('Create') ?> : <?= $generator->generateString('Save') ?>),
+            [
+                'id' => 'save-' . $model->formName(),
+                'class' => 'btn btn-success'
+            ]);
         ?>
 
         <?= '<?php ' ?>ActiveForm::end(); ?>

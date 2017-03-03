@@ -50,14 +50,13 @@ $this->params['breadcrumbs'][] = <?= $generator->generateString('View') ?>;
 ?>
 <div class="giiant-crud <?= Inflector::camel2id(StringHelper::basename($generator->modelClass), '-', true) ?>-view">
 
-    <!-- flash message -->
-    <?= "<?php if (\\Yii::\$app->session->getFlash('deleteError') !== null) : ?>
+    <?= "<?php foreach (\\Yii::\$app->session->getAllFlashes() as \$key => \$message) { ?>
         <span class=\"alert alert-info alert-dismissible\" role=\"alert\">
             <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
             <span aria-hidden=\"true\">&times;</span></button>
-            <?= \\Yii::\$app->session->getFlash('deleteError') ?>
+            <div class=\"alert alert-<?=\$key?>\"><?=\$message?></div>
         </span>
-    <?php endif; ?>" ?>
+    <?php } ?>" ?>
 
 
     <h1>
@@ -70,27 +69,25 @@ $this->params['breadcrumbs'][] = <?= $generator->generateString('View') ?>;
 
     <div class="clearfix crud-navigation">
 
-        <!-- menu buttons -->
         <div class='pull-left'>
-            <?= '<?= ' ?>Html::a(
-            '<span class="glyphicon glyphicon-pencil"></span> ' . <?= $generator->generateString('Edit') ?>,
-            [ 'update', <?= $urlParams ?>],
-            ['class' => 'btn btn-info']) ?>
-
-            <?= '<?= ' ?>Html::a(
-            '<span class="glyphicon glyphicon-copy"></span> ' . <?= $generator->generateString('Copy') ?>,
-            ['create', <?= $urlParams ?>, '<?= StringHelper::basename($generator->modelClass) ?>'=>$copyParams],
-            ['class' => 'btn btn-success']) ?>
-
-            <?= '<?= ' ?>Html::a(
-            '<span class="glyphicon glyphicon-plus"></span> ' . <?= $generator->generateString('New') ?>,
-            ['create'],
-            ['class' => 'btn btn-success']) ?>
+            <?= '<?= ' ?>Html::a('<span class="glyphicon glyphicon-pencil"></span> '
+                . <?= $generator->generateString('Edit') ?>,
+                [ 'update', <?= $urlParams ?>],
+                ['class' => 'btn btn-info'])
+            ?>
+            <?= '<?= ' ?>Html::a('<span class="glyphicon glyphicon-plus"></span> '
+                . <?= $generator->generateString('New') ?>,
+                ['create'],
+                ['class' => 'btn btn-success'])
+            ?>
         </div>
 
         <div class="pull-right">
             <?= "<?= " ?>Html::a('<span class="glyphicon glyphicon-list"></span> '
-            . <?= $generator->generateString('Full list') ?>, ['index'], ['class'=>'btn btn-default']) ?>
+                . <?= $generator->generateString('Full list') ?>,
+                ['index'],
+                ['class'=>'btn btn-default'])
+            ?>
         </div>
 
     </div>
@@ -104,37 +101,37 @@ $this->params['breadcrumbs'][] = <?= $generator->generateString('View') ?>;
     <?= $generator->partialView('detail_prepend', $model); ?>
 
     <?= '<?= ' ?>DetailView::widget([
-    'model' => $model,
-    'attributes' => [
-    <?php
+        'model' => $model,
+        'attributes' => [
+<?php
     foreach ($safeAttributes as $attribute) {
         $format = $generator->attributeFormat($attribute);
         if (!$format) {
             continue;
         } else {
-            echo $format.",\n";
+            echo "\t".$format.",\n";
         }
     }
     ?>
-    ],
+        ],
     ]); ?>
 
     <?= $generator->partialView('detail_append', $model); ?>
 
     <hr/>
 
-    <?= '<?= ' ?>Html::a('<span class="glyphicon glyphicon-trash"></span> ' . <?= $generator->generateString(
-        'Delete'
-    ) ?>, ['delete', <?= $urlParams ?>],
-    [
-    'class' => 'btn btn-danger',
-    'data-confirm' => '' . <?= $generator->generateString('Are you sure to delete this item?') ?> . '',
-    'data-method' => 'post',
-    ]); ?>
+    <?= '<?= ' ?>Html::a('<span class="glyphicon glyphicon-trash"></span> '
+        . <?= $generator->generateString('Delete') ?>,
+        ['delete', <?= $urlParams ?>],
+        [
+            'class' => 'btn btn-danger',
+            'data-confirm' => '' . <?= $generator->generateString('Are you sure to delete this item?') ?> . '',
+            'data-method' => 'post',
+        ]);
+    ?>
     <?= "<?php \$this->endBlock(); ?>\n\n"; ?>
 
     <?php
-
     // get relation info $ prepare add button
     $model = new $generator->modelClass();
 
@@ -145,8 +142,8 @@ $this->params['breadcrumbs'][] = <?= $generator->generateString('View') ?>;
                     'active'  => true,
                 ],\n
 EOS;
-    
-    echo "\n    <?php\n    \$tabBlocks=[\n";
+
+    echo "<?php\n\t    \$tabBlocks=[\n";
     foreach ($generator->getModelRelations($generator->modelClass, ['has_many']) as $name => $relation) {
         echo "            '".lcfirst($name)."',\n";
     }
@@ -156,12 +153,11 @@ EOS;
             $this->beginBlock($blockName);
             echo $this->render('rel/'.lcfirst($blockName),[
                 'model'=>$model,
-                'fk'=>'<?=array_keys($relation->link)[0]?>'
             ]);
             $this->endBlock();
         }
     <?php echo "?>\n";
-    
+
     foreach ($generator->getModelRelations($generator->modelClass, ['has_many']) as $name => $relation) {
         /**
         echo "\n<?php \$this->beginBlock('$name'); ?>\n";
@@ -234,7 +230,7 @@ EOS;
         $items .= <<<EOS
                 [
                     'content' => \$this->blocks['$lcname'],
-                    'label'   => '<small>$label 
+                    'label'   => '<small>$label
                             <span class="badge badge-default">'
                             .count(\$model->get{$name}()->asArray()->all()).'
                             </span>
@@ -245,13 +241,12 @@ EOS;
     }
     ?>
 
-    <?= 
+    <?=
     // render tabs
-    "<?= Tabs::widget(
-        [
+    "<?= Tabs::widget([
             'id' => 'relation-tabs',
             'encodeLabels' => false,
-            'items' => [\n $items 
+            'items' => [\n $items
             ]
         ]
     );

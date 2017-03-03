@@ -121,7 +121,7 @@ class Generator extends \yii\gii\generators\crud\Generator
     /**
      * @var bool whether to use phptidy on renderer files before saving
      */
-    public $tidyOutput = true;
+    public $tidyOutput = false;
 
     /**
      * @var bool whether to use php-cs-fixer to generate PSR compatible output
@@ -359,11 +359,11 @@ class Generator extends \yii\gii\generators\crud\Generator
                 if ($file=='view.php'){
                     foreach ($this->getModelRelations($this->modelClass, ['has_many']) as $name => $relation) {
                         $lcname=lcfirst($name);
-                        $files[] = new CodeFile("$viewPath/rel/$lcname", 
+                        $files[] = new CodeFile("$viewPath/rel/$lcname",
                                 $this->render("views/_view_rel.php", [
-                                    'permisions' => $permisions, 
+                                    'permisions' => $permisions,
                                     'name'=>$name,
-                                    'relation'=>$relation]));                        
+                                    'relation'=>$relation]));
                     }
                 }
             }
