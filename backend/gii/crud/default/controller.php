@@ -71,7 +71,7 @@ public $enableCsrfValidation = false;
     'access' => [
     'class' => AccessControl::className(),
     'rules' => [
-<?php 
+<?php
 foreach($accessDefinitions['roles'] as $roleName => $actions){
 ?>
     [
@@ -79,9 +79,9 @@ foreach($accessDefinitions['roles'] as $roleName => $actions){
                         'actions' => ['<?=implode("', '",$actions)?>'],
                         'roles' => ['<?=$roleName?>'],
                     ],
-<?php    
+<?php
 }
-?>    
+?>
                 ],
             ],
     ];
@@ -98,13 +98,13 @@ public function actionIndex()
     ?>
     $searchModel  = new <?= $searchModelClassName ?>;
     $dataProvider = $searchModel->search($_GET);
-<?php 
+<?php
 } else {
     ?>
     $dataProvider = new ActiveDataProvider([
     'query' => <?= $modelClass ?>::find(),
     ]);
-<?php 
+<?php
 } ?>
 
 Tabs::clearLocalStorage();
@@ -145,12 +145,16 @@ return $this->render('view', [
 public function actionCreate()
 {
 $model = new <?= $modelClass ?>;
-
+$request=\Yii::$app->request;
 try {
-if ($model->load($_POST) && $model->save()) {
+if ($model->load($request->post())){
+if ($model->save()) {
+ \Yii::$app->session->addFlash('success', $this->success());
 return $this->redirect(['view', <?= $urlParams ?>]);
+}
+unset($model->id);
 } elseif (!\Yii::$app->request->isPost) {
-$model->load($_GET);
+$model->load($request->get());
 }
 } catch (\Exception $e) {
 $msg = (isset($e->errorInfo[2]))?$e->errorInfo[2]:$e->getMessage();
@@ -168,14 +172,22 @@ return $this->render('create', ['model' => $model]);
 public function actionUpdate(<?= $actionParams ?>)
 {
 $model = $this->findModel(<?= $actionParams ?>);
-
-if ($model->load($_POST) && $model->save()) {
+$request=\Yii::$app->request;
+try {
+    if ($model->load($request->post())) {
+        if ($model->save()) {
+            \Yii::$app->session->addFlash('success', $this->success());
 return $this->redirect(Url::previous());
-} else {
+        }
+    }
+        } catch (Exception $e) {
+			$msg = (isset($e->errorInfo[2]))?$e->errorInfo[2]:$e->getMessage();
+			$model->addError('_exception', $msg);
+            if (isset($transaction)){ $transaction->rollBack();}
+        }
 return $this->render('update', [
 'model' => $model,
 ]);
-}
 }
 
 /**
@@ -190,7 +202,7 @@ try {
 $this->findModel(<?= $actionParams ?>)->delete();
 } catch (\Exception $e) {
 $msg = (isset($e->errorInfo[2]))?$e->errorInfo[2]:$e->getMessage();
-\Yii::$app->getSession()->addFlash('error', $msg);
+\Yii::$app->session->addFlash('success', $this->success());
 return $this->redirect(Url::previous());
 }
 

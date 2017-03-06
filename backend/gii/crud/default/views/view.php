@@ -32,8 +32,8 @@ echo "<?php\n";
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\grid\GridView;
-use yii\widgets\DetailView;
+use kartik\grid\GridView;
+use kartik\detail\DetailView;
 use yii\widgets\Pjax;
 use dmstr\bootstrap\Tabs;
 
@@ -50,22 +50,12 @@ $this->params['breadcrumbs'][] = <?= $generator->generateString('View') ?>;
 ?>
 <div class="giiant-crud <?= Inflector::camel2id(StringHelper::basename($generator->modelClass), '-', true) ?>-view">
 
-    <?= "<?php foreach (\\Yii::\$app->session->getAllFlashes() as \$key => \$message) { ?>
-        <span class=\"alert alert-info alert-dismissible\" role=\"alert\">
-            <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
-            <span aria-hidden=\"true\">&times;</span></button>
-            <div class=\"alert alert-<?=\$key?>\"><?=\$message?></div>
-        </span>
-    <?php } ?>" ?>
-
-
     <h1>
         <?= "<?= Yii::t('{$generator->modelMessageCategory}', '{$modelName}') ?>\n" ?>
         <small>
             <?= '<?= $model->'.$generator->getModelNameAttribute($generator->modelClass)." ?>\n" ?>
         </small>
     </h1>
-
 
     <div class="clearfix crud-navigation">
 

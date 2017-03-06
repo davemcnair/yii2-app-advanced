@@ -25,6 +25,8 @@ class Generator extends \yii\gii\generators\crud\Generator
 {
     use ParamTrait, ModelTrait, ProviderTrait;
 
+    public $baseControllerClass='common\controllers\DefaultController';
+
     /**
      * @var null comma separated list of provider classes
      */
@@ -121,7 +123,7 @@ class Generator extends \yii\gii\generators\crud\Generator
     /**
      * @var bool whether to use phptidy on renderer files before saving
      */
-    public $tidyOutput = false;
+    public $tidyOutput = true;
 
     /**
      * @var bool whether to use php-cs-fixer to generate PSR compatible output
@@ -351,7 +353,7 @@ class Generator extends \yii\gii\generators\crud\Generator
             if ($file==='_view_rel.php'){
                 continue;
             }
-            if (empty($this->searchModelClass) && $file === '_search.php') {
+            if ($file === '_search.php') {
                 continue;
             }
             if (is_file($templatePath.'/'.$file) && pathinfo($file, PATHINFO_EXTENSION) === 'php') {
@@ -391,12 +393,13 @@ class Generator extends \yii\gii\generators\crud\Generator
          */
         $suffix = str_replace(' ', '', $this->getName());
         $controllerFileinfo = pathinfo($controllerFile);
-        $formDataFile = StringHelper::dirname(StringHelper::dirname($controllerFile))
-                .'/gii/'
-                .str_replace('Controller', $suffix, $controllerFileinfo['filename']).'.json';
-        //$formData = json_encode($this->getFormAttributesValues());
-        $formData = json_encode(SaveForm::getFormAttributesValues($this, $this->formAttributes()));
-        $files[] = new CodeFile($formDataFile, $formData);
+
+//        $formDataFile = StringHelper::dirname(StringHelper::dirname($controllerFile))
+//                .'/gii/'
+//                .str_replace('Controller', $suffix, $controllerFileinfo['filename']).'.json';
+//        //$formData = json_encode($this->getFormAttributesValues());
+//        $formData = json_encode(SaveForm::getFormAttributesValues($this, $this->formAttributes()));
+//        $files[] = new CodeFile($formDataFile, $formData);
 
         return $files;
     }
@@ -411,7 +414,7 @@ class Generator extends \yii\gii\generators\crud\Generator
             $tmpFile = $tmpDir.'/'.md5($template);
             file_put_contents($tmpFile, $code);
 
-        if ($this->tidyOutput) {
+        if ($this->tidyOutput && !StringHelper::startsWith($template,'views/')) {
             $command = Yii::getAlias('@vendor/bin/phptidy').' replace '.$tmpFile;
             shell_exec($command);
             $code = file_get_contents($tmpFile);

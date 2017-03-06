@@ -24,14 +24,14 @@ echo "<?php\n";
 ?>
 
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
+use kartik\widgets\ActiveForm;
 use \dmstr\bootstrap\Tabs;
 use yii\helpers\StringHelper;
 
 /**
 * @var yii\web\View $this
 * @var <?= ltrim($generator->modelClass, '\\') ?> $model
-* @var yii\widgets\ActiveForm $form
+* @var kartik\widgets\ActiveForm $form
 */
 ?>
 
@@ -43,7 +43,7 @@ use yii\helpers\StringHelper;
 
     <?= '<?php ' ?>$form = ActiveForm::begin([
             'id' => '<?= $model->formName() ?>',
-            'layout' => '<?= $generator->formLayout ?>',
+            'type' => '<?= $generator->formLayout ?>',
             'enableClientValidation' => true,
             'errorSummaryCssClass' => 'error-summary alert alert-danger'
         ]);

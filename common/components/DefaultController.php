@@ -5,17 +5,13 @@ use Yii;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use common\models\AdminUser;
 use yii\web\BadRequestHttpException;
 use yii\helpers\StringHelper;
 use yii\web\Response;
 use yii\base\Model;
 
-class AbstractController extends Controller
+class DefaultController extends Controller
 {
-    const BACKGROUND=true;
-    const INLINE=false;
-
     public $jsFile;
 
     public function init() {
@@ -37,30 +33,30 @@ class AbstractController extends Controller
 
     public function behaviors(){
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => false,
-                        'roles' => ['?'],
-                    ],
-                    [
-                        'allow' => true,
-                        'roles' => ['@','admin'],
-                        'matchCallback' => function ($rule, $action) {
-                            $role=\Yii::$app->user->identity->role;
-                            return in_array($role,$rule->roles);
-                        }
-                    ],
-                ],
-            ],
+//            'access' => [
+//                'class' => AccessControl::className(),
+//                'rules' => [
+//                    [
+//                        'allow' => false,
+//                        'roles' => ['?'],
+//                    ],
+//                    [
+//                        'allow' => true,
+//                        'roles' => ['@','admin'],
+//                        'matchCallback' => function ($rule, $action) {
+//                            $role=\Yii::$app->user->identity->role;
+//                            return in_array($role,$rule->roles);
+//                        }
+//                    ],
+//                ],
+//            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'index'  => ['get'],
                     'view'   => ['get'],
                     'create' => ['get', 'post'],
-                    'update' => ['post'],
+                    'update' => ['get', 'post'],
                     'delete' => ['post'],
                 ],
             ],
@@ -73,11 +69,6 @@ class AbstractController extends Controller
         if (StringHelper::startsWith($action->id,'ajax-'))  {
             Yii::$app->response->format = Response::FORMAT_JSON;
             if (Yii::$app->request->isAjax === false){
-                throw new BadRequestHttpException();
-            }
-        }
-        if (StringHelper::startsWith($action->id,'dev-'))  {
-            if ($user && !$user->group->is('dev')){
                 throw new BadRequestHttpException();
             }
         }
