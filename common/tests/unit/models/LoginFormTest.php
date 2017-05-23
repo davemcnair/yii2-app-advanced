@@ -4,7 +4,7 @@ namespace common\tests\unit\models;
 
 use Yii;
 use common\models\LoginForm;
-use common\fixtures\User as UserFixture;
+use common\fixtures\UserFixture as UserFixture;
 
 /**
  * Login form test
@@ -12,7 +12,7 @@ use common\fixtures\User as UserFixture;
 class LoginFormTest extends \Codeception\Test\Unit
 {
     /**
-     * @var \frontend\tests\UnitTester
+     * @var \common\tests\UnitTester
      */
     protected $tester;
 

@@ -12,6 +12,10 @@ return [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'console\controllers',
     'controllerMap' => [
+        'fixture' => [
+            'class' => 'yii\console\controllers\FixtureController',
+            'namespace' => 'common\fixtures',
+          ],
         'batch' => [
             'class' => 'schmunk42\giiant\commands\BatchController',
             'modelQueryNamespace' => '\\common\\models\\query',
