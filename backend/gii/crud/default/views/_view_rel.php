@@ -56,7 +56,7 @@ use yii\widgets\LinkPager;
                     $pivotRelation->link
                 )."'=>\$model->{$model->primaryKey()[0]}]],
             ['class'=>'btn btn-info btn-xs']
-        ) 
+        )
         ?>\n";
         } else {
             $addButton = '';
@@ -70,7 +70,7 @@ use yii\widgets\LinkPager;
             Inflector::camel2words($name)."',
             ['".$generator->createRelationRoute($relation, 'index')."'],
             ['class'=>'btn text-muted btn-xs']
-            ) ?>\n";
+        ) ?>\n";
  */
         // TODO: support multiple PKs
         echo "  <?= Html::a(
@@ -83,7 +83,7 @@ use yii\widgets\LinkPager;
         ); ?>\n";
         echo $addButton;
 
-        echo "</div>\n</div>\n"; #<div class='clearfix'></div>\n";
+        echo "</div>\n"; #<div class='clearfix'></div>\n";
         // render pivot grid
         if ($relation->via !== null) {
             $pjaxId = "pjax-{$pivotName}";
@@ -100,8 +100,8 @@ use yii\widgets\LinkPager;
         // render relation grid
         if (!empty($output)):
             echo "<?php Pjax::begin(['id'=>'pjax-{$name}', 'enableReplaceState'=> false, "
-                . "\n'linkSelector'=>'#pjax-{$name} ul.pagination a, th a', "
-                . "\n'clientOptions' => ['pjax:success'=>'function(){alert(\"yo\")}']]) ?>\n";
+            . "\n'linkSelector'=>'#pjax-{$name} ul.pagination a, th a', "
+            . "\n'clientOptions' => ['pjax:success'=>'function(){alert(\"yo\")}']]) ?>\n";
             echo "<?=\n ".$output."\n?>\n";
             echo "<?php Pjax::end() ?>\n";
         endif;

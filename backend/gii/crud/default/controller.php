@@ -18,7 +18,11 @@ if ($modelClass === $searchModelClass) {
     $searchModelClassName = $searchModelAlias;
 }
 
-$pks = $generator->getTableSchema()->primaryKey;
+if ($generator->getTableSchema()) {
+    $pks = $generator->getTableSchema()->primaryKey;
+} else {
+    $pks = ['_id'];
+}
 $urlParams = $generator->generateUrlParams();
 $actionParams = $generator->generateActionParams();
 $actionParamComments = $generator->generateActionParamComments();
@@ -101,7 +105,7 @@ public function actionIndex()
 <?php
 } else {
     ?>
-    $dataProvider = new ActiveDataProvider([
+    $dataProvider = new \yii\data\ActiveDataProvider([
     'query' => <?= $modelClass ?>::find(),
     ]);
 <?php
@@ -177,7 +181,7 @@ try {
     if ($model->load($request->post())) {
         if ($model->save()) {
             \Yii::$app->session->addFlash('success', $this->success());
-return $this->redirect(Url::previous());
+            return $this->redirect(Url::previous());
         }
     }
         } catch (Exception $e) {
@@ -185,8 +189,8 @@ return $this->redirect(Url::previous());
 			$model->addError('_exception', $msg);
             if (isset($transaction)){ $transaction->rollBack();}
         }
-return $this->render('update', [
-'model' => $model,
+        return $this->render('update', [
+            'model' => $model,
 ]);
 }
 

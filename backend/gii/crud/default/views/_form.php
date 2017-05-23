@@ -45,7 +45,18 @@ use yii\helpers\StringHelper;
             'id' => '<?= $model->formName() ?>',
             'type' => '<?= $generator->formLayout ?>',
             'enableClientValidation' => true,
-            'errorSummaryCssClass' => 'error-summary alert alert-danger'
+            'errorSummaryCssClass' => 'error-summary alert alert-danger',
+            'fieldConfig' => [
+                     'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
+                     'horizontalCssClasses' => [
+                         'label' => 'col-sm-2',
+                         #'offset' => 'col-sm-offset-4',
+                         'wrapper' => 'col-sm-8',
+                         'error' => '',
+                         'hint' => '',
+                     ],
+                 ],
+            ]
         ]);
     ?>
 

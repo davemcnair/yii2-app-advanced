@@ -160,6 +160,10 @@ echo "?>\n"
                 'url' => ['{$route}'],
                 'label' => '<i class="glyphicon glyphicon-{$iconType}"></i> '
                     . Yii::t('$generator->modelMessageCategory', '$label'),
+             ],
+
+ PHP;
+
             ],
 
 PHP;

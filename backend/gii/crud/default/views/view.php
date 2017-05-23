@@ -57,6 +57,7 @@ $this->params['breadcrumbs'][] = <?= $generator->generateString('View') ?>;
         </small>
     </h1>
 
+
     <div class="clearfix crud-navigation">
 
         <div class='pull-left'>
@@ -73,11 +74,7 @@ $this->params['breadcrumbs'][] = <?= $generator->generateString('View') ?>;
         </div>
 
         <div class="pull-right">
-            <?= "<?= " ?>Html::a('<span class="glyphicon glyphicon-list"></span> '
-                . <?= $generator->generateString('Full list') ?>,
-                ['index'],
-                ['class'=>'btn btn-default'])
-            ?>
+            
         </div>
 
     </div>
