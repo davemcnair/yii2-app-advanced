@@ -215,6 +215,10 @@ trait ProviderTrait
 
     protected function shorthandAttributeFormat($attribute, $model)
     {
+        // TODO: cleanup
+        if (is_object($model) && (!method_exists($model,'getTableSchema') || !$model->getTableSchema())){
+            return;
+        }
         $column = $this->getColumnByAttribute($attribute, $model);
         if (!$column) {
             Yii::trace("No column for '{$attribute}' found", __METHOD__);
@@ -227,6 +231,10 @@ trait ProviderTrait
             $format = 'boolean';
         } elseif ($column->type === 'text') {
             $format = 'ntext';
+        } elseif (stripos($column->name, 'created_at') !== false && $column->phpType === 'integer') {
+            $format = 'date';
+        } elseif (stripos($column->name, 'updated_at') !== false && $column->phpType === 'integer') {
+            $format = 'date';
         } elseif (stripos($column->name, 'time') !== false && $column->phpType === 'integer') {
             $format = 'datetime';
         } elseif (stripos($column->name, 'email') !== false) {
