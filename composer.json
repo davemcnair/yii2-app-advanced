@@ -43,7 +43,8 @@
         "league/factory-muffin-faker": "^2.0",
         "phpdocumentor/phpdocumentor": "2.*",
         "dmstr/yii2-db": "*",
-        "schmunk42/yii2-giiant":"@dev"
+        "schmunk42/yii2-giiant":"@dev",
+        "elisdn/yii2-gii-fixture-generator":"@dev"
     },
     "config": {
         "process-timeout": 1800

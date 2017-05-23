@@ -41,11 +41,14 @@ use yii\widgets\LinkPager;
         $showAllRecords = false;
 
         if ($relation->via !== null) {
-            $pivotName = Inflector::pluralize($generator->getModelByTableName($relation->via->from[0]));
+            $via=$relation->via;
+            $pivotTable=is_array($via)?$via[0]:$via->from[0];
+            $pivotName = Inflector::pluralize($generator->getModelByTableName($pivotTable));
             $pivotRelation = $model->{'get'.$pivotName}();
             $pivotPk = key($pivotRelation->link);
 
-            $addButton = "  <?= Html::a(
+            $addButton = "  <?php
+                echo Html::a(
             '<span class=\"glyphicon glyphicon-link\"></span> ' . ".$generator->generateString('Attach')." . ' ".
                 Inflector::singularize(Inflector::camel2words($name)).
                 "', ['".$generator->createRelationRoute($pivotRelation, 'create')."', '".
@@ -53,26 +56,29 @@ use yii\widgets\LinkPager;
                     $pivotRelation->link
                 )."'=>\$model->{$model->primaryKey()[0]}]],
             ['class'=>'btn btn-info btn-xs']
-        ) ?>\n";
+        ) 
+        ?>\n";
         } else {
             $addButton = '';
         }
 
         // relation list, add, create buttons
-        echo "<div style='position: relative'>\n<div style='position:absolute; right: 0px; top: 0px;'>\n";
+        echo "<div class='text-right'>\n";
 
-        echo "  <?= Html::a(
+/**        echo "  <?= Html::a(
             '<span class=\"glyphicon glyphicon-list\"></span> ' . ".$generator->generateString('List All')." . ' ".
             Inflector::camel2words($name)."',
             ['".$generator->createRelationRoute($relation, 'index')."'],
             ['class'=>'btn text-muted btn-xs']
-        ) ?>\n";
+            ) ?>\n";
+ */
         // TODO: support multiple PKs
         echo "  <?= Html::a(
-            '<span class=\"glyphicon glyphicon-plus\"></span> ' . ".$generator->generateString('New')." . ' ".
-            Inflector::singularize(Inflector::camel2words($name))."',
-            ['".$generator->createRelationRoute($relation, 'create')."', '".
-            Inflector::id2camel($generator->generateRelationTo($relation), '-', true)."' => ['".key($relation->link)."' => \$model->".$model->primaryKey()[0]."]],
+            '<span class=\"glyphicon glyphicon-plus\"></span> ' . ".$generator->generateString('New')." . ' "
+            .Inflector::singularize(Inflector::camel2words($name))."',
+            ['".$generator->createRelationRoute($relation, 'create')."', '"
+            .($relation->link?Inflector::id2camel($generator->generateRelationTo($relation), '-', true)."' => ['".key($relation->link)."' => \$model->".$model->primaryKey()[0]."]],":"")
+            ."
             ['class'=>'btn btn-success btn-xs']
         ); ?>\n";
         echo $addButton;
@@ -93,7 +99,9 @@ use yii\widgets\LinkPager;
 
         // render relation grid
         if (!empty($output)):
-            echo "<?php Pjax::begin(['id'=>'pjax-{$name}', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-{$name} ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert(\"yo\")}']]) ?>\n";
+            echo "<?php Pjax::begin(['id'=>'pjax-{$name}', 'enableReplaceState'=> false, "
+                . "\n'linkSelector'=>'#pjax-{$name} ul.pagination a, th a', "
+                . "\n'clientOptions' => ['pjax:success'=>'function(){alert(\"yo\")}']]) ?>\n";
             echo "<?=\n ".$output."\n?>\n";
             echo "<?php Pjax::end() ?>\n";
         endif;
