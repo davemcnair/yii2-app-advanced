@@ -299,7 +299,7 @@ EOS;
 
         $reflection = new \ReflectionClass($relation->modelClass);
         $controller = $this->generator->pathPrefix.Inflector::camel2id($reflection->getShortName(), '-', true);
-        $relKey = key($relation->link?$relation->link:[]);
+        $relKey = key($relation->link);
         $deleteButtons=$deleteButtonPivot
             ?"      'buttons'    => [
         $deleteButtonPivot
@@ -309,13 +309,14 @@ EOS;
             'class'      => '{$this->generator->actionButtonClass}',
             'template'   => '$template',
             'contentOptions' => ['nowrap'=>'nowrap'],
-            'urlCreator' => function (\$action, \$model, \$key, \$index) {
-                // using the column name as key, not mapping to 'id' like the standard generator
-                \$params = is_array(\$key) ? \$key : [\$model->primaryKey()[0] => (string) \$key];
-                \$params[0] = '$controller' . '/' . \$action;
-                \$params['{$model->formName()}'] = ['$relKey' => \$model->primaryKey()[0]];
-                return \$params;
-            },{$deleteButtons}
+//            'urlCreator' => function (\$action, \$model, \$key, \$index) {
+//                // using the column name as key, not mapping to 'id' like the standard generator
+//                \$params = is_array(\$key) ? \$key : [\$model->primaryKey()[0] => (string) \$key];
+//                \$params[0] = '$controller' . '/' . \$action;
+//                \$params['{$model->formName()}'] = ['$relKey' => \$model->primaryKey()[0]];
+//                return \$params;
+//            },
+            {$deleteButtons}
             'controller' => '$controller'
         ]
 EOS;

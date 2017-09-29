@@ -30,15 +30,29 @@ class AcceptanceTester extends \Codeception\Actor
         }
     }
 
-    public function login($name, $password)
+    public function login($username, $password)
     {
         $I = $this;
          $I->amOnPage('/user/login');
-        $I->fillField('Username', $name);
-        $I->fillField('Password', $password);
-        $I->click('login-button');
-         $I->wait(1);
-//        $I->see('Logout ('.$name.')');
-//        $I->dontSeeLink('Login');
+        // if snapshot exists - skipping login
+        // doesnt owrk
+        try {
+            if ($I->loadSessionSnapshot('login')) {
+                return;
+            }
+        } catch(UnableToSetCookieException $e){
+            // doesnt work on phantomjs as of 22/5/17
+            return;
+        }
+        // logging in
+        $I->amOnPage('user/login');
+        $I->submitForm('#login-form', [
+            'Login[username]' => $username,
+            'Login[password]' => $password
+        ]);
+        $I->wait(1);
+        $I->see($username, '.navbar-nav');
+        // saving snapshot
+        $I->saveSessionSnapshot('login');
     }
 }

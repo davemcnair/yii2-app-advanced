@@ -21,6 +21,11 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
+    <?php if (YII_ENV_PROD){ ?>
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/prod/favicon.ico">
+    <?php } else { ?>
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/dev/favicon.ico">
+    <?php } ?>
     <?php $this->head() ?>
 </head>
 <body>
@@ -41,14 +46,11 @@ AppAsset::register($this);
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/admin/user/login']];
     } else {
-        $menuItems[] = '<li>'
-            . Html::beginForm(['/admin/user/logout'], 'post')
-            . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link logout']
-            )
-            . Html::endForm()
-            . '</li>';
+        $menuItems[] = [
+            'label' => 'Logout ('. Yii::$app->user->identity->username . ')',
+            'url' => ['/user/logout'],
+            'linkOptions' => ['data-method' => 'post']
+        ];
     }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],

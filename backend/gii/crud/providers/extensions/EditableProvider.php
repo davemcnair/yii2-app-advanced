@@ -406,13 +406,13 @@ EOS;
         [
             'class' => '\kartik\grid\ActionColumn',
             'template' => '{view} {update} {delete}',
-            'urlCreator' =>  
-                function(\$action, \$model, \$key, \$index) {
-                    \$params = is_array(\$key) ? \$key : ['id' => (string) \$key];
-                    \$params[0] = '{$controller}/' . \$action;
-                    \$params['{$model->formName()}'] = ['".key($relation->link)."' => \$model->primaryKey()[0]];
-                    return Url::toRoute(\$params);            
-                },
+//            'urlCreator' =>  
+//                function(\$action, \$model, \$key, \$index) {
+//                    \$params = is_array(\$key) ? \$key : ['id' => (string) \$key];
+//                    \$params[0] = '{$controller}/' . \$action;
+//                    \$params['{$model->formName()}'] = ['".key($relation->link)."' => \$model->primaryKey()[0]];
+//                    return Url::toRoute(\$params);            
+//                },
         ]            
                  ";
         $query = $showAllRecords ?
