@@ -23,7 +23,7 @@ class m161010_101010_default_users extends Migration
         $model->setPassword(Yii::$app->params['adminPassword']);
         $this->insert('{{%user}}', [
             'id'=>2,
-            'username'=>'admin',
+            'username'=>Yii::$app->params['adminUsername'],
             'email'=>Yii::$app->params['adminEmail'],
             'password_hash'=> $model->password_hash,
 //            'auth_key'=> $model->auth_key,

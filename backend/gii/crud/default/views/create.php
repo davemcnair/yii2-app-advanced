@@ -18,6 +18,7 @@ echo "<?php\n";
 ?>
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 /**
 * @var yii\web\View $this
@@ -43,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= '<?= ' ?>
             Html::a(
             <?= $generator->generateString('Cancel') ?>,
-            \yii\helpers\Url::previous(),
+            Url::previous(),
             ['class' => 'btn btn-default']) ?>
         </div>
     </div>
@@ -51,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <hr />
 
     <?= '<?= ' ?>$this->render('_form', [
-    'model' => $model,
+        'model' => $model,
     ]); ?>
 
 </div>

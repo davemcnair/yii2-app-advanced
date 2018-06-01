@@ -3,9 +3,11 @@ modules:
     enabled:
         #        - PhpBrowser:
         #            url: http://admin.example.com/
+        - Sequence
+        - Asserts
         - WebDriver:
             url: http://admin.example.com/index-test.php
-            browser: phantomjs
+            browser: chrome
         - Yii2:
             part: [orm, fixtures]
         - backend\tests\Helper\Functional:

@@ -30,23 +30,18 @@ class <?= $className ?> extends Base<?= $className . "\n" ?>
         return $this-><?=$toStringAttr?>;
     }
 
-    public function behaviors()
-    {
-        return ArrayHelper::merge(
-            parent::behaviors(),
-            [
-                # custom behaviors
-            ]
-        );
-    }
-
     public function rules()
     {
-        return ArrayHelper::merge(
-             parent::rules(),
-             [
-                  # custom validation rules
-             ]
-        );
+        return ArrayHelper::merge(parent::rules(),[
+            # custom 
+        ]);
     }
+    
+    public function attributeLabels()
+    {
+        return ArrayHelper::merge(parent::attributeLabels(),[
+            # custom 
+        ]);
+    }
+    
 }

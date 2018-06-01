@@ -25,7 +25,10 @@ class Generator extends \yii\gii\generators\crud\Generator
 {
     use ParamTrait, ModelTrait, ProviderTrait;
 
-    public $baseControllerClass='common\controllers\DefaultController';
+    public $modelNamespace = 'common\\models\\';
+    public $searchModelNamespace = 'backend\\models\\search\\';
+    public $controllerNamespace = 'backend\\controllers\\';
+    public $baseControllerClass='common\\controllers\\DefaultController';
 
     /**
      * @var null comma separated list of provider classes
@@ -44,7 +47,7 @@ class Generator extends \yii\gii\generators\crud\Generator
     /**
      * @var string default view path
      */
-    public $viewPath = '@backend/views';
+    public $viewPath = '@app/views';
 
     /**
      * @var string table prefix to be removed from class names when auto-detecting model names, eg. `app_` converts table `app_foo` into `Foo`
@@ -138,7 +141,7 @@ class Generator extends \yii\gii\generators\crud\Generator
     public $moduleNs;
     public $migrationClass;
 
-    public $indexGridClass = 'yii\\grid\\GridView';
+    public $indexGridClass = 'kartik\\grid\\GridView';
 
     private $_p = [];
 
@@ -239,8 +242,9 @@ class Generator extends \yii\gii\generators\crud\Generator
     {
         return [
             'modelClass',
-            'searchModelClass',
-            'controllerClass',
+            'controllerPath',
+//            'searchModelClass',
+//            'controllerClass',
             'baseControllerClass',
             'viewPath',
             'pathPrefix',
@@ -361,7 +365,7 @@ class Generator extends \yii\gii\generators\crud\Generator
                 if ($file=='view.php'){
                     foreach ($this->getModelRelations($this->modelClass, ['has_many']) as $name => $relation) {
                         $lcname=lcfirst($name);
-                        $files[] = new CodeFile("$viewPath/rel/$lcname",
+                        $files[] = new CodeFile("$viewPath/rel/$lcname.php",
                                 $this->render("views/_view_rel.php", [
                                     'permisions' => $permisions,
                                     'name'=>$name,
@@ -459,6 +463,87 @@ class Generator extends \yii\gii\generators\crud\Generator
                 return $var ? 'TRUE' : 'FALSE';
             default:
                 return var_export($var, true);
+        }
+    }
+
+    protected function generateRelationName($relations, $table, $key, $multiple)
+    {
+        if (!empty($key) && substr_compare($key, 'id', -2, 2, true) === 0 && strcasecmp($key, 'id')) {
+            $key = rtrim(substr($key, 0, -2), '_');
+}
+        if ($multiple) {
+            $key = Inflector::pluralize($key);
+        }
+        $name = $rawName = Inflector::id2camel($key, '_');
+        $i = 0;
+        while (isset($table->columns[lcfirst($name)])) {
+            $name = $rawName . ($i++);
+        }
+        while (isset($relations[$table->fullName][$name])) {
+            $name = $rawName . ($i++);
+        }
+//        foreach ($table->foreignKeys as $refs) {
+//            if (count($refs) === 2) {
+//                if (isset($refs[$pk[0]])) {
+//                    $fks[$pk[0]] = [$refs[0], $refs[$pk[0]]];
+//                } elseif (isset($refs[$pk[1]])) {
+//                    $fks[$pk[1]] = [$refs[0], $refs[$pk[1]]];
+//                }
+//            }
+//        }
+        return $name;
+    }
+
+    public function generateActiveField($attribute)
+    {
+        $tableSchema = $this->getTableSchema();
+        if ($tableSchema === false || !isset($tableSchema->columns[$attribute])) {
+            if (preg_match('/^(password|pass|passwd|passcode)$/i', $attribute)) {
+                return "\$form->field(\$model, '$attribute')->passwordInput()";
+            } else {
+                return "\$form->field(\$model, '$attribute')";
+            }
+        }
+        $column = $tableSchema->columns[$attribute];
+        if ($column->phpType === 'boolean') {
+            return "\$form->field(\$model, '$attribute')->checkbox()";
+        } elseif ($column->type === 'text') {
+            return "\$form->field(\$model, '$attribute')->widget(\\yii\\redactor\\widgets\\Redactor::className())";
+        } else {
+            if (preg_match('/^(password|pass|passwd|passcode)$/i', $column->name)) {
+                $input = 'passwordInput';
+            } else {
+                $input = 'textInput';
+            }
+            if (is_array($column->enumValues) && count($column->enumValues) > 0) {
+                $dropDownOptions = [];
+                foreach ($column->enumValues as $enumValue) {
+                    $dropDownOptions[$enumValue] = Inflector::humanize($enumValue);
+                }
+                return "\$form->field(\$model, '$attribute')->dropDownList("
+                    . preg_replace("/\n\s*/", ' ', VarDumper::export($dropDownOptions)).", ['prompt' => ''])";
+            } elseif ($column->phpType !== 'string' || $column->size === null) {
+                return "\$form->field(\$model, '$attribute')->$input()";
+            } else {
+                return "\$form->field(\$model, '$attribute')->$input(['maxlength' => true])";
+            }
+        }
+    }
+
+    public function generateColumnFormat($column)
+    {
+        if ($column->phpType === 'boolean') {
+            return 'boolean';
+        } elseif ($column->type === 'text') {
+            return 'raw';
+        } elseif (stripos($column->name, 'time') !== false && $column->phpType === 'integer') {
+            return 'datetime';
+        } elseif (stripos($column->name, 'email') !== false) {
+            return 'email';
+        } elseif (stripos($column->name, 'url') !== false) {
+            return 'url';
+        } else {
+            return 'text';
         }
     }
 }

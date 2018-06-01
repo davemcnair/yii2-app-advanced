@@ -27,6 +27,7 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use \dmstr\bootstrap\Tabs;
 use yii\helpers\StringHelper;
+use common\helpers\EkoHelper;
 
 /**
 * @var yii\web\View $this
@@ -56,7 +57,6 @@ use yii\helpers\StringHelper;
                          'hint' => '',
                      ],
                  ],
-            ]
         ]);
     ?>
 

@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = <?= $generator->generateString('Edit') ?>;
     <hr />
 
     <?= '<?php ' ?>echo $this->render('_form', [
-    'model' => $model,
+        'model' => $model,
     ]); ?>
 
 </div>

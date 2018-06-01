@@ -32,6 +32,7 @@ echo "<?php\n";
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use common\components\EkoHelper;
 use kartik\grid\GridView;
 use kartik\detail\DetailView;
 use yii\widgets\Pjax;
@@ -219,7 +220,7 @@ EOS;
                     'content' => \$this->blocks['$lcname'],
                     'label'   => '<small>$label
                             <span class="badge badge-default">'
-                            .count(\$model->get{$name}()->asArray()->all()).'
+                            .\$model->get{$name}()->count().'
                             </span>
                         </small>',
                     'active'  => false,
@@ -229,14 +230,12 @@ EOS;
     ?>
 
     <?=
-    // render tabs
     "<?= Tabs::widget([
-            'id' => 'relation-tabs',
-            'encodeLabels' => false,
-            'items' => [\n $items
-            ]
+        'id' => 'relation-tabs',
+        'encodeLabels' => false,
+        'items' => [\n $items
         ]
-    );
+    ]);
     ?>";
     ?>
 

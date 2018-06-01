@@ -31,6 +31,7 @@ echo "<?php\n";
 ?>
 
 use yii\helpers\Html;
+use common\components\EkoHelper;
 use yii\widgets\Pjax;
 use kartik\grid\GridView;
 use yii\data\ActiveDataProvider;
@@ -49,12 +50,12 @@ use yii\widgets\LinkPager;
 
             $addButton = "  <?php
                 echo Html::a(
-            '<span class=\"glyphicon glyphicon-link\"></span> ' . ".$generator->generateString('Attach')." . ' ".
+            '<span class=\"glyphicon glyphicon-link\"></span> ' . "
+                    .$generator->generateString('Attach')." . ' ".
                 Inflector::singularize(Inflector::camel2words($name)).
-                "', ['".$generator->createRelationRoute($pivotRelation, 'create')."', '".
-                Inflector::singularize($pivotName)."'=>['".key(
-                    $pivotRelation->link
-                )."'=>\$model->{$model->primaryKey()[0]}]],
+                "', ['".$generator->createRelationRoute($pivotRelation, 'create')."', '"
+                .key($pivotRelation->link)."'=>\$model->{$model->primaryKey()[0]}
+                    ],
             ['class'=>'btn btn-info btn-xs']
         )
         ?>\n";
@@ -74,7 +75,8 @@ use yii\widgets\LinkPager;
  */
         // TODO: support multiple PKs
         echo "  <?= Html::a(
-            '<span class=\"glyphicon glyphicon-plus\"></span> ' . ".$generator->generateString('New')." . ' "
+            '<span class=\"glyphicon glyphicon-plus\"></span> ' . "
+                .$generator->generateString('Add')." . ' "
             .Inflector::singularize(Inflector::camel2words($name))."',
             ['".$generator->createRelationRoute($relation, 'create')."', '"
             .($relation->link?Inflector::id2camel($generator->generateRelationTo($relation), '-', true)."' => ['".key($relation->link)."' => \$model->".$model->primaryKey()[0]."]],":"")
@@ -99,9 +101,7 @@ use yii\widgets\LinkPager;
 
         // render relation grid
         if (!empty($output)):
-            echo "<?php Pjax::begin(['id'=>'pjax-{$name}', 'enableReplaceState'=> false, "
-            . "\n'linkSelector'=>'#pjax-{$name} ul.pagination a, th a', "
-            . "\n'clientOptions' => ['pjax:success'=>'function(){alert(\"yo\")}']]) ?>\n";
-            echo "<?=\n ".$output."\n?>\n";
-            echo "<?php Pjax::end() ?>\n";
+            echo '    <div class="table-responsive">'.PHP_EOL;    
+            echo '        <?='.$output."?>\n";
+            echo '    </div>'.PHP_EOL;
         endif;

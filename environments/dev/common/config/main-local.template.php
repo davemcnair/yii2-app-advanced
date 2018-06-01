@@ -24,5 +24,9 @@ return [
             // for the mailer to send real emails.
             'useFileTransport' => true,
         ],
+        'assetmanager'=>[
+            'class' => 'yii\web\AssetManager',
+            'appendTimestamp' => true,
+        ],        
     ],
 ];

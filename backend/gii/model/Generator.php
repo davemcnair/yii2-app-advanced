@@ -16,6 +16,8 @@ use schmunk42\giiant\helpers\SaveForm;
  */
 class Generator extends \yii\gii\generators\model\Generator
 {
+    public $baseClass = 'common\\models\\base\\BaseModel';
+
     /**
      * @var bool whether to overwrite (extended) model classes, will be always created, if file does not exist
      */
@@ -242,7 +244,7 @@ class Generator extends \yii\gii\generators\model\Generator
 //var_dump($relations,$tableName);exit;
             $className = php_sapi_name() === 'cli'
                 ? $this->generateClassName($tableName)
-                : $this->modelClass;
+                : ($this->modelClass?$this->modelClass:$this->generateClassName($tableName));
 
             $queryClassName = ($this->generateQuery) ? $this->generateQueryClassName($className) : false;
             $tableSchema = $db->getTableSchema($tableName);
@@ -266,11 +268,23 @@ class Generator extends \yii\gii\generators\model\Generator
 
             $params['blameable'] = $this->generateBlameable($tableSchema);
             $params['timestamp'] = $this->generateTimestamp($tableSchema);
-            $params['toStringAttr']= $ 
+            
+            $params['toStringAttr']= $this->generateToStringAttr($tableSchema); 
 
-$alias=Yii::getAlias(
+            $alias=Yii::getAlias(
                     '@'.str_replace('\\', '/', $this->ns)
                 ).'/base/'.$className.$this->baseClassSuffix.'.php';
+            
+            if (in_array($className,[
+                'AuthAssignment',
+                'AuthItem',
+                'AuthItemChild',
+                'AuthRule',
+                'Menu',
+                'Migration',                
+            ])){
+                continue;
+            }
             $files[] = new CodeFile(
                 Yii::getAlias(
                     '@'.str_replace('\\', '/', $this->ns)
@@ -316,6 +330,20 @@ $alias=Yii::getAlias(
         }
 
         return $files;
+    }
+
+    public function generateToStringAttr($tableSchema){
+        $attr=null;
+        $firstAttr=null;
+        foreach ($tableSchema->columns as $column) {
+            if (!$firstAttr){
+                $firstAttr=$column->name;
+            }
+            if (in_array($column->name,['name'])){
+                $attr=$column->name;
+            }
+        }
+        return $attr?$attr:$firstAttr;
     }
 
     /**
@@ -529,9 +557,14 @@ $alias=Yii::getAlias(
                     $ea
                 ).",\n                ]\n            ]";
         }
-
-        // inject namespace for targetClass
+        //convert smallint to boolean
+        foreach($table->columns as $column){
+            if ($column->dbType==='tinyint(1)'){
+                $column->type='boolean';
+            }
+        }
         $parentRules = parent::generateRules($table);
+        // inject namespace for targetClass
         $ns = "\\{$this->ns}\\";
         $match = "'targetClass' => ";
         $replace = $match.$ns;

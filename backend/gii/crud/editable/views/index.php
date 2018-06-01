@@ -56,7 +56,7 @@ if($generator->accessFilter):
 */
 $actionColumnTemplates = [];
 
-if (\Yii::$app->user->can('<?=$permisions['view']['name']?>')) { 
+if (\Yii::$app->user->can('<?=$permisions['view']['name']?>')) {
     $actionColumnTemplates[] = '{view}';
 }
 
@@ -92,7 +92,11 @@ echo '?>';
 
     <?php if ($generator->indexWidgetType === 'grid'): ?>
 
-    <?= "<?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert(\"yo\")}']]) ?>\n"; ?>
+    <?= "<?php \yii\widgets\Pjax::begin(["
+        . "\n\t\t'id'=>'pjax-main', "
+        . "\n\t\t'enableReplaceState'=> false, "
+        . "\n\t\t'linkSelector'=>'#pjax-main ul.pagination a, th a', "
+        . "\n\t\t'clientOptions' => ['pjax:success'=>'function(){alert(\"yo\")}']]) ?>\n"; ?>
 
     <h1>
         <?= "<?= Yii::t('{$generator->messageCategory}', '{$modelName}') ?>" ?>
@@ -102,7 +106,7 @@ echo '?>';
     </h1>
     <div class="clearfix crud-navigation">
 <?php
-if($generator->accessFilter){ 
+if($generator->accessFilter){
 	echo "<?php\n"
 ?>
 if(\Yii::$app->user->can('<?=$permisions['create']['name']?>')){

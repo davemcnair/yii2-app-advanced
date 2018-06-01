@@ -83,7 +83,7 @@ class DefaultController extends Controller
         if ($message instanceof Model){
             $message=$this->stringifyErrors($message);
         }
-        return $this->stringifyAction($action).' error'.($message?', '.$message:'');
+        return $this->stringifyAction($action).' error '.($message?', '.$message:'');
     }
 
     protected function stringifyAction($action=''){
@@ -112,9 +112,30 @@ class DefaultController extends Controller
         return $msg;
     }
 
-    public function ajaxErrorResponse($model){
-        $response=['status'=>'error','error'=>$this->stringifyErrors($model)];
+    public function ajaxError($model){
+        $response=['status'=>'error','error'=>$this->error($model)];
+        return $response;
+    }
+
+    public function ajaxErrorResponse($model)
+    {
+        $response = ['status' => 'error', 'error' => $this->stringifyErrors($model)];
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $response;
+    }
+
+    public function catchActionException($e, $model){
+        if (YII_ENV_DEV){
+            throw $e;
+        }
+        $msg = (isset($e->errorInfo[2]))?$e->errorInfo[2]:$e->getMessage();
+		$model->addError('_exception', $msg);
+    }
+
+    public function catchAtomicActionException($e, $model, $transaction){
+        $this->catchActionException($e, $model);
+        if (isset($transaction)){
+            $transaction->rollBack();
+        }
     }
 }
